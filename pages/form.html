@@ -33,9 +33,11 @@
   </head>
   <body>
     <h1 class="text-secondary text-center mt-5">Create New Quiz</h1>
-
+    <div class="alert w-50 mx-auto mt-4 opacity-0" id="alertBox" role="alert">
+      A simple secondary alert—check it out!
+    </div>
     <!-- quiz title form -->
-    <form id="quizTitleForm" class="w-50 mx-auto p-3 mt-5 rounded-4">
+    <form id="quizTitleForm" class="w-50 mx-auto p-3 mt-1 rounded-4">
       <div class="mb-3">
         <label for="quizTitle" class="form-label">Quiz Title</label>
         <input type="text" id="quizTitle" value="Quiz 1" class="form-control" />
@@ -88,6 +90,16 @@
         Discard
       </button>
     </form>
+
+    <!-- create quiz button -->
+    <div
+      id="quizButtonContainer"
+      class="w-50 mx-auto mt-4 d-flex flx-end align-items-center justify-content-end"
+    >
+      <button type="button" id="createQuizButton" class="btn btn-primary">
+        Create Quiz
+      </button>
+    </div>
 
     <div id="questionsContainer"></div>
 

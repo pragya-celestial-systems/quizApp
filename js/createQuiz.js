@@ -1,3 +1,4 @@
+// TODO : quiz title must not be cleared when we add question
 const addQuestionButton = document.querySelector("#addQuestionButton");
 const quizTitle = document.querySelector("#quizTitle");
 const question = document.querySelector("#question");
@@ -6,6 +7,10 @@ const addOptionButton = document.querySelector("#addOptionButton");
 const optionsContainer = document.querySelector("#optionsContainer");
 const questionsContainer = document.querySelector("#questionsContainer");
 const discardButton = document.querySelector("#discardButton");
+const alertBox = document.querySelector("#alertBox");
+const inputElements = document.querySelectorAll("input");
+const createQuizButton = document.querySelector("#createQuizButton");
+
 export function renderForm() {
   window.open("../pages/form.html", "_self");
 }
@@ -26,8 +31,24 @@ function resetInput() {
   answerType.checked = false;
 }
 
+function displayAlert(
+  alertType = "alert-primary",
+  message = "Something went wrong."
+) {
+  // remove the opacity-0 and previously added classes
+  alertBox.classList.remove("opacity-0", "alert-danger", "alert-success");
+
+  alertBox.classList.add(alertType, "opacity-100");
+  alertBox.textContent = message;
+}
+
+function hideAlert() {
+  alertBox.classList.remove("opacity-100");
+  alertBox.classList.add("opacity-0");
+}
+
 function addOption(option, optionType) {
-  const answerType = document.querySelector(".answer-type:checked").value;
+  const answerType = document.querySelector(".answer-type:checked")?.value;
   optionType = answerType === "checkBox" ? "checkbox" : "radio";
 
   const optionHtml = `
@@ -48,26 +69,50 @@ function checkEmptyField() {
   const answerType = document.querySelector(".answer-type:checked");
 
   if (quizTitle.value === "") {
-    alert("Please fill the quiz title.");
+    displayAlert("alert-danger", "Please fill the quiz title.");
+    // alert("Please fill the quiz title.");
     return;
   } else if (question.value === "") {
-    alert("Please enter the question.");
+    displayAlert("alert-danger", "Please enter the question.");
+    // alert("Please enter the question.");
     return;
   } else if (answerType === null) {
-    alert("Please select the answer type.");
+    displayAlert("alert-danger", "Please select the answer type.");
+    // alert("Please select the answer type.");
     return;
   } else if (optionsContainer.children.length < 2) {
-    alert("Please add at least two options.");
+    displayAlert("alert-danger", "Please add at least 2 options.");
+    // alert("Please add at least two options.");
     return;
   }
 }
 
 function saveQuiz(quiz) {
+  const quizObj = {
+    title: quizTitle.value,
+    questions: getAllQuestions(),
+  };
+
   const quizArray = JSON.parse(localStorage.getItem("quiz")) || [];
-  quizArray.push(quiz);
+  quizArray.push(quizObj);
 
   // save the updated array in the local storage
   localStorage.setItem("quiz", JSON.stringify(quizArray));
+}
+
+function getAllQuestions() {
+  let questions =
+    questionsContainer.children.length < 0
+      ? []
+      : Array.from(questionsContainer?.children);
+  let questionsArray = [];
+
+  questions.forEach((qus) => {
+    const question = qus.firstElementChild.textContent.split(":")[1];
+    questionsArray.push(question);
+  });
+
+  return questionsArray;
 }
 
 function getQuestionData() {
@@ -107,10 +152,6 @@ function addQuestion(questionData) {
     )
     .join("");
 
-  questionData.options.map((option, index) => console.log(option, index));
-
-  console.log(questionData.options);
-
   const correctAnswerHtml = Array.isArray(questionData.correctAnswer)
     ? questionData.correctAnswer.join(", ")
     : questionData.correctAnswer;
@@ -118,7 +159,7 @@ function addQuestion(questionData) {
   // Create the full HTML for the question
   const questionHtml = `
     <div class="questionBox">
-      <p class="question">Qus : <b>${questionData.question}</b></p>
+      <p class="question">Qus : ${questionData.question}</p>
       <div class="options">
         ${optionsHtml}
       </div>
@@ -134,7 +175,8 @@ function addQuestion(questionData) {
 
 addOptionButton.addEventListener("click", () => {
   if (option.value === "") {
-    alert("option can't be empty");
+    displayAlert("alert-danger", "Option can't be empty.");
+    // alert("option can't be empty");
     return;
   }
 
@@ -147,22 +189,33 @@ addOptionButton.addEventListener("click", () => {
 });
 
 addQuestionButton.addEventListener("click", (e) => {
-  // add validation
+  // validate input
   checkEmptyField();
 
   // get the value of all the input fields
   const response = getQuestionData();
 
   if (response.status === 204) {
-    alert(response.message);
+    // alert(response.message);
+    displayAlert("alert-danger", response.message);
     return;
   }
 
-  // create question
-  addQuestion(response.quizData);
+  if (questionsContainer.children.length >= 10) {
+    displayAlert("alert-danger", "You can't add more than 10 questions.");
+    // alert("You can't add more than 10 questions.");
+    return;
+  }
 
-  // save the obj in local storage
-  // display all the questions and their correct answer in the below container
+  addQuestion(response.quizData);
+  displayAlert("alert-success", "Question added successfully.");
+
+  // hide the alert after 3 seconds
+  setTimeout(() => {
+    hideAlert();
+  }, 3000);
+
+  resetInput();
 });
 
 discardButton.addEventListener("click", () => {
@@ -173,4 +226,30 @@ window.addEventListener("DOMContentLoaded", () => {
   question.value = "what is html?";
   document.querySelector(".answer-type").checked = true;
   option.value = "option 1";
+});
+
+inputElements.forEach((input) => {
+  input.addEventListener("focus", hideAlert);
+});
+
+createQuizButton.addEventListener("click", () => {
+  if (questionsContainer.children.length <= 0) {
+    displayAlert(
+      "alert-danger",
+      "There must be at least one question to create quiz."
+    );
+    return;
+  }
+  getAllQuestions();
+  saveQuiz();
+
+  // clear all the questions
+  questionsContainer.innerHTML = "";
+
+  displayAlert("alert-success", "Quiz created successfully.");
+
+  // hide the alert after 3 seconds
+  setTimeout(() => {
+    hideAlert();
+  }, 3000);
 });
