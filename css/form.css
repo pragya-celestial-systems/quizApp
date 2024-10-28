@@ -1,0 +1,8 @@
+* {
+  box-sizing: border-box;
+}
+
+#quizHeading {
+  text-align: center;
+  color: grey;
+}

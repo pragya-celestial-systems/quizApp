@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#content {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#loginHeading {
+  color: grey;
+  margin-bottom: 3rem;
+}
+
+#loginCard {
+  height: 50vh;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: whitesmoke;
+  border-radius: 25px;
+  padding: 2rem;
+}
+
+#usernameLabel,
+#passwordLabel {
+  font-size: 1rem;
+  color: grey;
+  margin: 0.5rem 0;
+}
+
+#username,
+#password {
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+}
+
+#passwordLabel {
+  margin-top: 2rem;
+}
+
+#radioButtons {
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.box,
+#radioButtons {
+  display: flex;
+  align-items: center;
+  margin-right: 2rem;
+  color: grey;
+}
+
+.radio-label {
+  margin: auto 2rem auto 0.5rem;
+}
+
+.alert {
+  opacity: 0;
+}
