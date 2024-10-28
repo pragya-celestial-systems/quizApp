@@ -2,7 +2,59 @@
   box-sizing: border-box;
 }
 
+#quizTitleForm,
+#quizForm {
+  background-color: whitesmoke;
+}
+
 #quizHeading {
   text-align: center;
+  color: grey;
+}
+
+.form-control {
+  border: none;
+}
+
+label {
+  font-weight: 500;
+  color: grey;
+}
+
+#checkBoxRadio {
+  margin-left: 2rem;
+}
+
+#addOptionButton {
+  margin-left: 1rem;
+}
+
+/*-------- Questions Container -------*/
+#questionsContainer {
+  width: 50%;
+  margin: auto;
+  border-radius: 1rem;
+  margin-top: 2rem;
+  overflow: hidden;
+  padding: 1rem;
+  border: 1px solid lightgrey;
+}
+
+.questionBox {
+  background-color: white;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-bottom: 1px solid lightgrey;
+}
+
+.question {
+  font-weight: 500;
+}
+
+.options {
+  color: grey;
+}
+
+.correct-answer {
   color: grey;
 }
