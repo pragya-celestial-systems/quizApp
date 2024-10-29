@@ -10,21 +10,21 @@ const discardButton = document.querySelector("#discardButton");
 const alertBox = document.querySelector("#alertBox");
 const inputElements = document.querySelectorAll("input");
 const createQuizButton = document.querySelector("#createQuizButton");
+const questionsArray = [];
 
 export function renderForm() {
   window.open("../pages/form.html", "_self");
 }
 
 function getCorrectAnswer() {
-  return Array.from(optionsContainer.children).filter(
-    (option) => option.checked
-  );
+  return Array.from(optionsContainer.children).filter((option) => {
+    console.log(option.firstElementChild.checked);
+    return option.firstElementChild.checked;
+  });
 }
 
 function resetInput() {
   const answerType = document.querySelector(".answer-type:checked");
-
-  quizTitle.value = "Quiz 1";
   question.value = "";
   option.value = "";
   optionsContainer.innerHTML = "";
@@ -52,7 +52,9 @@ function addOption(option, optionType) {
   optionType = answerType === "checkBox" ? "checkbox" : "radio";
 
   const optionHtml = `
+  <div class="option">
   <input type="${optionType}" name="option" value="${option}"/> ${option}
+  </div>
   `;
 
   optionsContainer.insertAdjacentHTML("afterbegin", optionHtml);
@@ -70,27 +72,29 @@ function checkEmptyField() {
 
   if (quizTitle.value === "") {
     displayAlert("alert-danger", "Please fill the quiz title.");
-    // alert("Please fill the quiz title.");
-    return;
-  } else if (question.value === "") {
+    return { status: 204 };
+  } 
+  else if (question.value === "") {
     displayAlert("alert-danger", "Please enter the question.");
-    // alert("Please enter the question.");
-    return;
-  } else if (answerType === null) {
+    return { status: 204 };
+  } 
+  else if (answerType === null) {
     displayAlert("alert-danger", "Please select the answer type.");
-    // alert("Please select the answer type.");
-    return;
-  } else if (optionsContainer.children.length < 2) {
+    return { status: 204 };
+  } 
+  else if (optionsContainer.children.length < 2) {
     displayAlert("alert-danger", "Please add at least 2 options.");
-    // alert("Please add at least two options.");
-    return;
+    return { status: 204 };
+  } 
+  else {
+    return { status: 200 };
   }
 }
 
-function saveQuiz(quiz) {
+function saveQuiz(questions) {
   const quizObj = {
     title: quizTitle.value,
-    questions: getAllQuestions(),
+    questions,
   };
 
   const quizArray = JSON.parse(localStorage.getItem("quiz")) || [];
@@ -100,24 +104,10 @@ function saveQuiz(quiz) {
   localStorage.setItem("quiz", JSON.stringify(quizArray));
 }
 
-function getAllQuestions() {
-  let questions =
-    questionsContainer.children.length < 0
-      ? []
-      : Array.from(questionsContainer?.children);
-  let questionsArray = [];
-
-  questions.forEach((qus) => {
-    const question = qus.firstElementChild.textContent.split(":")[1];
-    questionsArray.push(question);
-  });
-
-  return questionsArray;
-}
-
 function getQuestionData() {
   const answerType = document.querySelector(".answer-type:checked").value;
   let correctAnswer = getCorrectAnswer();
+  console.log(correctAnswer, answerType);
 
   if (!correctAnswer || correctAnswer.length <= 0) {
     return {
@@ -140,6 +130,9 @@ function getQuestionData() {
     correctAnswer,
   };
 
+  // push the question's data in the questions array
+  questionsArray.push(quizData);
+  console.log(questionsArray);
   return { status: 201, quizData };
 }
 
@@ -170,10 +163,10 @@ function addQuestion(questionData) {
   `;
 
   // Append the question HTML to the questions container
-  questionsContainer.insertAdjacentHTML("beforeend", questionHtml);
+  questionsContainer?.insertAdjacentHTML("beforeend", questionHtml);
 }
 
-addOptionButton.addEventListener("click", () => {
+addOptionButton?.addEventListener("click", () => {
   if (option.value === "") {
     displayAlert("alert-danger", "Option can't be empty.");
     // alert("option can't be empty");
@@ -188,9 +181,13 @@ addOptionButton.addEventListener("click", () => {
   option.value = "";
 });
 
-addQuestionButton.addEventListener("click", (e) => {
+addQuestionButton?.addEventListener("click", (e) => {
   // validate input
-  checkEmptyField();
+  const res = checkEmptyField();
+
+  if (res.status === 204) {
+    return;
+  }
 
   // get the value of all the input fields
   const response = getQuestionData();
@@ -208,6 +205,7 @@ addQuestionButton.addEventListener("click", (e) => {
   }
 
   addQuestion(response.quizData);
+  questionsContainer.style.display = "block";
   displayAlert("alert-success", "Question added successfully.");
 
   // hide the alert after 3 seconds
@@ -218,21 +216,15 @@ addQuestionButton.addEventListener("click", (e) => {
   resetInput();
 });
 
-discardButton.addEventListener("click", () => {
+discardButton?.addEventListener("click", () => {
   resetInput();
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  question.value = "what is html?";
-  document.querySelector(".answer-type").checked = true;
-  option.value = "option 1";
 });
 
 inputElements.forEach((input) => {
   input.addEventListener("focus", hideAlert);
 });
 
-createQuizButton.addEventListener("click", () => {
+createQuizButton?.addEventListener("click", () => {
   if (questionsContainer.children.length <= 0) {
     displayAlert(
       "alert-danger",
@@ -240,11 +232,12 @@ createQuizButton.addEventListener("click", () => {
     );
     return;
   }
-  getAllQuestions();
-  saveQuiz();
 
-  // clear all the questions
+  saveQuiz(questionsArray);
+
+  // clear all the questions and quiz title
   questionsContainer.innerHTML = "";
+  quizTitle.value = "";
 
   displayAlert("alert-success", "Quiz created successfully.");
 
@@ -252,4 +245,9 @@ createQuizButton.addEventListener("click", () => {
   setTimeout(() => {
     hideAlert();
   }, 3000);
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  // hide the questions container
+  questionsContainer.style.display = "none";
 });

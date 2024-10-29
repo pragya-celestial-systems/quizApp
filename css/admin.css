@@ -15,15 +15,16 @@
   align-items: center;
   display: flex;
   justify-content: space-evenly;
-  width: 90%;
+  width: 50%;
 }
 
-.btn {
+#createButton, #manageButton {
   cursor: pointer;
   height: 25vh;
   width: 20vw;
   border-radius: 25px;
-  background-color: aliceblue;
+  background-color: whitesmoke;
+  color: grey;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,8 +32,8 @@
   font-weight: 600;
 }
 
-.btn:hover {
-  box-shadow: 0 0 15px lightgrey;
+#createButton:hover, #manageButton:hover {
+  box-shadow: 0 5px 12px lightgrey;
   transition: 0.3s;
 }
 

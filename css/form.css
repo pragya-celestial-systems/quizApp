@@ -55,6 +55,11 @@ label {
   color: grey;
 }
 
+.option {
+  color: grey;
+  margin-top: 8px;
+}
+
 .correct-answer {
   color: grey;
 }
