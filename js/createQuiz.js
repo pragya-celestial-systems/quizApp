@@ -65,7 +65,7 @@ function getOptions() {
   const options = Array.from(optionsContainer.children);
 
   // Array.from(nodelist) will convert the nodelist into an array
-  return options.map((option) => option.textContent);
+  return options.map((option) => option.firstElementChild.value);
 }
 
 function checkEmptyField() {
@@ -116,8 +116,7 @@ function getQuestionData() {
   if (answerType === "MCQ") {
     correctAnswer = correctAnswer[0].firstElementChild.value;
   } else {
-    correctAnswer = correctAnswer.map(ans => ans.firstElementChild.value);
-    console.log(correctAnswer);
+    correctAnswer = correctAnswer.map((ans) => ans.firstElementChild.value);
   }
 
   const quizData = {
