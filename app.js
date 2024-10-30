@@ -42,7 +42,7 @@ function handleFormSubmission(enteredData) {
   }
 
   saveToken(user?.userType);
-  // resetInput();
+  resetInput();
 
   // navigate to the home page
   displayHome(user?.userType);
