@@ -18,7 +18,7 @@ export function renderForm() {
 
 function getCorrectAnswer() {
   return Array.from(optionsContainer.children).filter((option) => {
-    if(option.firstElementChild.checked) {
+    if (option.firstElementChild.checked) {
       return option.firstElementChild;
     }
   });
@@ -74,20 +74,16 @@ function checkEmptyField() {
   if (quizTitle.value === "") {
     displayAlert("alert-danger", "Please fill the quiz title.");
     return { status: 204 };
-  } 
-  else if (question.value === "") {
+  } else if (question.value === "") {
     displayAlert("alert-danger", "Please enter the question.");
     return { status: 204 };
-  } 
-  else if (answerType === null) {
+  } else if (answerType === null) {
     displayAlert("alert-danger", "Please select the answer type.");
     return { status: 204 };
-  } 
-  else if (optionsContainer.children.length < 2) {
+  } else if (optionsContainer.children.length < 2) {
     displayAlert("alert-danger", "Please add at least 2 options.");
     return { status: 204 };
-  } 
-  else {
+  } else {
     return { status: 200 };
   }
 }
@@ -118,9 +114,10 @@ function getQuestionData() {
 
   // if the answer type is MCQ
   if (answerType === "MCQ") {
-    correctAnswer = correctAnswer[0].textContent;
+    correctAnswer = correctAnswer[0].firstElementChild.value;
   } else {
-    correctAnswer = correctAnswer.map((ans) => ans.defaultValue);
+    correctAnswer = correctAnswer.map(ans => ans.firstElementChild.value);
+    console.log(correctAnswer);
   }
 
   const quizData = {
@@ -136,7 +133,6 @@ function getQuestionData() {
 }
 
 function addQuestion(questionData) {
-  console.log(questionData);
   const optionsHtml = questionData.options
     .map(
       (option, index) => `
@@ -250,6 +246,6 @@ createQuizButton?.addEventListener("click", () => {
 window.addEventListener("DOMContentLoaded", () => {
   // hide the questions container
   questionsContainer.style.display = "none";
-  const quizArrayLength = JSON.parse(localStorage.getItem('quiz')).length;
-  quizTitle.value = `Quiz ${quizArrayLength + 1}`
+  const quizArrayLength = JSON.parse(localStorage.getItem("quiz")).length;
+  quizTitle.value = `Quiz ${quizArrayLength + 1}`;
 });

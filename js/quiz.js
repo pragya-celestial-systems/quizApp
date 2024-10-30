@@ -26,7 +26,7 @@ function renderQuestions(questionsArray) {
           </div>
         </div>
       `;
-      
+
     form.insertAdjacentHTML("afterbegin", questionHtml);
   });
 }
@@ -51,21 +51,24 @@ form.addEventListener("submit", (e) => {
 
   const quizData = getQuizData();
   const answers = quizData.questions.map((question, index) => {
-    console.log(question);
     // Array.from - it will convert the nodelist into an array
-    const selectedOptions = Array.from(
+    let selectedOptions = Array.from(
       form.querySelectorAll(`input[name="question-${index}"]:checked`)
-    ).map((input) => input.value);
+    ).map((input) => input.value.split("\n")[1].trim());
+
+    if (question.answerType === "MCQ") {
+      selectedOptions = selectedOptions[0];
+    }
 
     return {
       question: question.question,
-      selectedOptions: selectedOptions
+      selectedOptions: selectedOptions,
+      answerType: question.answerType,
     };
   });
 
-  console.log(answers);
-
-  // save answers in the local storage
+  // save answers in the session storage
+  sessionStorage.setItem("answers", JSON.stringify(answers));
 });
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -75,4 +78,9 @@ window.addEventListener("DOMContentLoaded", () => {
   quizTitle.textContent = quizData.title;
 
   renderQuestions(quizData.questions);
+});
+
+window.addEventListener("load", () => {
+  // clear the stored answers
+  sessionStorage.removeItem("answers");
 });

@@ -1,0 +1,19 @@
+#quizTitle {
+    color: cadetblue;
+}
+
+#content {
+    box-shadow: 0 5px 15px lightgrey;
+    padding: 1rem;
+}
+
+.questionBox {
+    margin: 1rem;
+    padding-bottom: 1rem ;
+    border-bottom: 1px solid lightgrey;
+    min-height: 150px;
+}
+
+#submitButton {
+
+}
