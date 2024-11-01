@@ -1,4 +1,5 @@
 import { renderForm } from "./createQuiz.js";
+import { renderEditQuizForm } from "./manageQuiz.js";
 
 const buttons = document.querySelectorAll(".btn");
 const activeUser = document.querySelector(".active-user");
@@ -15,12 +16,11 @@ buttons.forEach((btn) => {
 
 function renderContent(buttonType) {
   if (buttonType === "create") {
-    // ...
     renderForm();
-  } else if (buttonType === "manage") {
-    // ...
-  } else {
-    // ...
+  }
+
+  if (buttonType === "manage") {
+    renderEditQuizForm();
   }
 }
 

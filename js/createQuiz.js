@@ -1,4 +1,3 @@
-// TODO : quiz title must not be cleared when we add question
 const addQuestionButton = document.querySelector("#addQuestionButton");
 const quizTitle = document.querySelector("#quizTitle");
 const question = document.querySelector("#question");
@@ -164,7 +163,6 @@ function addQuestion(questionData) {
 addOptionButton?.addEventListener("click", () => {
   if (option.value === "") {
     displayAlert("alert-danger", "Option can't be empty.");
-    // alert("option can't be empty");
     return;
   }
 
@@ -188,14 +186,12 @@ addQuestionButton?.addEventListener("click", (e) => {
   const response = getQuestionData();
 
   if (response.status === 204) {
-    // alert(response.message);
     displayAlert("alert-danger", response.message);
     return;
   }
 
   if (questionsContainer.children.length >= 10) {
     displayAlert("alert-danger", "You can't add more than 10 questions.");
-    // alert("You can't add more than 10 questions.");
     return;
   }
 
@@ -244,7 +240,13 @@ createQuizButton?.addEventListener("click", () => {
 
 window.addEventListener("DOMContentLoaded", () => {
   // hide the questions container
-  questionsContainer.style.display = "none";
+  if (questionsContainer) {
+    questionsContainer.style.display = "none";
+  }
+
   const quizArrayLength = JSON.parse(localStorage.getItem("quiz")).length;
-  quizTitle.value = `Quiz ${quizArrayLength + 1}`;
+
+  if (quizTitle) {
+    quizTitle.value = `Quiz ${quizArrayLength + 1}`;
+  }
 });

@@ -1,0 +1,91 @@
+main {
+  height: 85vh;
+  width: 85vw;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+}
+
+#leftSide {
+  height: 100%;
+  width: 45%;
+  display: flex;
+  justify-content: center;
+  padding-right: 2rem;
+  border-right: 1px solid lightgrey;
+}
+
+#rightSide {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.quiz-box {
+  height: 100%;
+  width: 100%;
+}
+
+.message {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quiz-card {
+  padding: 1rem;
+  height: 120px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border: 1px solid lightgrey;
+  cursor: pointer;
+}
+
+.quiz-card:hover {
+  background-color: whitesmoke;
+  border-color: whitesmoke;
+  transition: 0.3s;
+}
+
+.active-card {
+  background-color: whitesmoke;
+  border: whitesmoke;
+}
+
+.icon {
+  display: flex;
+  height: 100%;
+  width: 85px;
+  align-items: center;
+  justify-content: center;
+  color: grey;
+}
+
+.fa-list {
+  font-size: 3rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: grey;
+}
+
+#previewContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.options {
+  color: grey;
+  margin-bottom: 1rem;
+}
+
+#editButton {
+  width: 100px;
+}

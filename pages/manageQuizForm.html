@@ -27,29 +27,36 @@
     ></script>
 
     <!-- css stylesheet -->
-    <link rel="stylesheet" href="../css/quiz.css" />
+    <link rel="stylesheet" href="../css/manageQuizForm.css" />
 
-    <title>Test</title>
+    <title>Manage Quiz</title>
   </head>
   <body>
-    <h1 id="quizTitle" class="text-center mt-5"></h1>
-    <main id="content" class="mt-5 w-50 mx-auto">
-      <form id="test">
-        <button id="submitButton" class="btn btn-primary" type="submit">
-          Submit
-        </button>
-      </form>
-      <div class="overlay d-none">
-        <div id="modalContent" class="rounded-5">
-          <div id="closeBtnContainer">
-            <i class="fa-solid fa-xmark"></i>
-          </div>
-          <div class="result" class="shadow-lg rounded-5"></div>
+    <h1 class="text-center mt-4">Manage Quiz</h1>
+    <main id="content">
+      <div id="leftSide">
+        <div class="message d-none border-1">
+          <h3>No Quiz Available</h3>
         </div>
+        <div class="quiz-box"></div>
+      </div>
+      <div id="rightSide">
+        <div class="message d-none">
+          <h3>No Preview Available</h3>
+        </div>
+        <form id="previewContainer">
+          <div class="w-100 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" id="editButton">
+              <i class="fa-solid fa-pen-to-square mx-1"></i>Edit
+            </button>
+          </div>
+          <hr />
+          <div class="preview"></div>
+        </form>
       </div>
     </main>
-
+    
     <!-- script -->
-    <script src="../js/quiz.js" type="module"></script>
+    <script src="../js/manageQuiz.js" type="module"></script>
   </body>
 </html>
