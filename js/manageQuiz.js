@@ -116,17 +116,28 @@ function handleDeleteButtonClick(buttons) {
         };
 
         const allQuiz = JSON.parse(localStorage.getItem("quiz"));
-        const updatedQuizArray = allQuiz.map((quiz) => {
-          if (quiz.title === currentQuiz.title) {
-            return updatedQuiz;
-          }
-        });
+        let updatedQuizArray;
+
+        if (updatedQuestions.length <= 0) {
+          updatedQuizArray = updatedQuizArray = allQuiz.filter(
+            (quiz) => quiz.title !== currentQuiz.title
+          );
+        } else {
+          updatedQuizArray = allQuiz.map((quiz) => {
+            if (quiz.title === currentQuiz.title) {
+              return updatedQuiz;
+            }
+          });
+        }
 
         // Save the updated quiz back to local storage
         localStorage.setItem("quiz", JSON.stringify(updatedQuizArray));
 
-        // delete from the DOM as well
-        // e.target.closest(".question-box").remove();
+        if (updatedQuestions.length <= 0) {
+          renderQuiz(updatedQuizArray);
+          return;
+        }
+
         displayPreview(updatedQuiz.questions, true);
       } else {
         alert("Oops! Something went wrong.");
