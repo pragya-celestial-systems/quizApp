@@ -27,81 +27,93 @@
     ></script>
 
     <!-- css stylesheet -->
-    <link rel="stylesheet" href="../css/form.css" />
+    <link rel="stylesheet" href="../css/createQuizForm.css" />
 
     <title>Create Quiz</title>
   </head>
   <body>
-    <h1 class="text-secondary text-center mt-5">Create New Quiz</h1>
-    <div class="alert w-50 mx-auto mt-4 opacity-0" id="alertBox" role="alert">
-      A simple secondary alert—check it out!
-    </div>
-    <!-- quiz title form -->
-    <form id="quizTitleForm" class="w-50 mx-auto p-3 mt-1 rounded-4">
-      <div class="mb-3">
-        <label for="quizTitle" class="form-label">Quiz Title</label>
-        <input type="text" id="quizTitle" value="Quiz 1" class="form-control" />
+    <div class="unauthorised-msg d-none">Not Authorised!</div>
+    <main>
+      <h1 class="text-secondary text-center mt-5">Create New Quiz</h1>
+      <div class="alert w-50 mx-auto mt-4 opacity-0" id="alertBox" role="alert">
+        A simple secondary alert—check it out!
       </div>
-    </form>
-
-    <!-- quiz Form -->
-    <form id="quizForm" class="w-50 mx-auto p-3 mt-2 rounded-4">
-      <div class="mb-3">
-        <label for="question" class="form-label">Question</label>
-        <input type="text" class="form-control" id="question" />
-      </div>
-      <label for="">Answer Type</label>
-      <div class="mt-3 form-check">
-        <input
-          class="answer-type"
-          type="radio"
-          value="MCQ"
-          name="answer-type"
-        />
-        MCQ
-        <input
-          id="checkBoxRadio"
-          class="answer-type"
-          type="radio"
-          value="checkBox"
-          name="answer-type"
-        />
-        Check Box
-      </div>
-
-      <!-- option input -->
-      <div class="mb-3 mt-3">
-        <label for="option" class="form-label">Options</label>
-        <div class="d-flex w-100">
-          <input type="text" class="form-control" id="option" />
-          <button type="button" id="addOptionButton" class="btn btn-primary">
-            <i class="fa-solid fa-plus"></i>
-          </button>
+      <!-- quiz title form -->
+      <form id="quizTitleForm" class="w-50 mx-auto p-3 mt-1 rounded-4">
+        <div class="mb-3">
+          <label for="quizTitle" class="form-label">Quiz Title</label>
+          <input
+            type="text"
+            id="quizTitle"
+            value="Quiz 1"
+            class="form-control"
+          />
         </div>
+      </form>
+
+      <!-- quiz Form -->
+      <form id="quizForm" class="w-50 mx-auto p-3 mt-2 rounded-4">
+        <div class="mb-3">
+          <label for="question" class="form-label">Question</label>
+          <input type="text" class="form-control" id="question" />
+        </div>
+        <label for="">Answer Type</label>
+        <div class="mt-3 form-check">
+          <input
+            class="answer-type"
+            type="radio"
+            value="MCQ"
+            name="answer-type"
+          />
+          MCQ
+          <input
+            id="checkBoxRadio"
+            class="answer-type"
+            type="radio"
+            value="checkBox"
+            name="answer-type"
+          />
+          Check Box
+        </div>
+
+        <!-- option input -->
+        <div class="mb-3 mt-3">
+          <label for="option" class="form-label">Options</label>
+          <div class="d-flex w-100">
+            <input type="text" class="form-control" id="option" />
+            <button type="button" id="addOptionButton" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- options container -->
+        <div id="optionsContainer"></div>
+
+        <button
+          type="button"
+          id="addQuestionButton"
+          class="btn btn-primary mt-3"
+        >
+          Add Question
+        </button>
+        <button type="button" id="discardButton" class="btn btn-primary mt-3">
+          Discard
+        </button>
+      </form>
+
+      <!-- create quiz button -->
+      <div
+        id="quizButtonContainer"
+        class="w-50 mx-auto mt-4 d-flex flx-end align-items-center justify-content-end"
+      >
+        <button type="button" id="createQuizButton" class="btn btn-primary">
+          Create Quiz
+        </button>
       </div>
 
-      <!-- options container -->
-      <div id="optionsContainer"></div>
-
-      <button type="button" id="addQuestionButton" class="btn btn-primary mt-3">
-        Add Question
-      </button>
-      <button type="button" id="discardButton" class="btn btn-primary mt-3">
-        Discard
-      </button>
-    </form>
-
-    <!-- create quiz button -->
-    <div
-      id="quizButtonContainer"
-      class="w-50 mx-auto mt-4 d-flex flx-end align-items-center justify-content-end"
-    >
-      <button type="button" id="createQuizButton" class="btn btn-primary">
-        Create Quiz
-      </button>
-    </div>
-
-    <div id="questionsContainer"></div>
+      <div id="questionsContainer"></div>
+    </main>
 
     <!-- script -->
     <script src="../js/createQuiz.js" type="module"></script>

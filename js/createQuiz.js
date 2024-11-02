@@ -1,3 +1,5 @@
+import { authoriseUser } from "./global.js";
+
 const addQuestionButton = document.querySelector("#addQuestionButton");
 const quizTitle = document.querySelector("#quizTitle");
 const question = document.querySelector("#question");
@@ -9,6 +11,8 @@ const discardButton = document.querySelector("#discardButton");
 const alertBox = document.querySelector("#alertBox");
 const inputElements = document.querySelectorAll("input");
 const createQuizButton = document.querySelector("#createQuizButton");
+const messageEl = document.querySelector(".unauthorised-msg");
+const mainContainer = document.querySelector("main");
 const questionsArray = [];
 
 export function renderForm() {
@@ -228,6 +232,7 @@ createQuizButton?.addEventListener("click", () => {
 
   // clear all the questions and quiz title
   questionsContainer.innerHTML = "";
+  questionsContainer.style.display = "none";
   quizTitle.value = "";
 
   displayAlert("alert-success", "Quiz created successfully.");
@@ -239,6 +244,8 @@ createQuizButton?.addEventListener("click", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
+  authoriseUser(messageEl, mainContainer);
+
   // hide the questions container
   if (questionsContainer) {
     questionsContainer.style.display = "none";

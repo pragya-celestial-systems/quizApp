@@ -8,7 +8,12 @@ const resultContainer = document.querySelector(".result");
 
 function renderQuestions(questionsArray) {
   questionsArray.forEach((quizObj, index) => {
-    const options = createOptions(quizObj.options, quizObj.answerType, index);
+    const options = createOptions(
+      quizObj.options,
+      quizObj.answerType,
+      index,
+      true
+    );
 
     const questionHtml = `
         <div class="questionBox" data-question-number="${index}">
@@ -76,7 +81,8 @@ function displayResult(resultData) {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const response = saveSubmittedData(form);
+  const quizData = getQuizData();
+  const response = saveSubmittedData(quizData, form);
 
   // calculate the result
   const result = calculateResult(response);

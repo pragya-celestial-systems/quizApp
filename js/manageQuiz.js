@@ -1,9 +1,12 @@
-import { createOptions, saveSubmittedData } from "./global.js";
+import { authoriseUser, createOptions, saveSubmittedData } from "./global.js";
 
 const cardsContainer = document.querySelector(".quiz-box");
-const previewContainer = document.querySelector(".preview");
+const previewContainer = document.querySelector(".preview-container");
+const previewBox = document.querySelector(".preview");
 const message = document.querySelectorAll(".message");
 const editButton = document.querySelector("#editButton");
+const mainContainer = document.querySelector("main");
+const messageEl = document.querySelector(".unauthorised-msg");
 let isEditing = false;
 
 export function renderEditQuizForm() {
@@ -46,13 +49,16 @@ function displayMessage() {
 }
 
 function displayPreview(questions, isEditing = false) {
-  if (previewContainer) {
-    previewContainer.innerHTML = "";
+  if (previewBox) {
+    previewBox.innerHTML = "";
   }
 
   questions.forEach((question, index) => {
     addQuestion(question, index, isEditing);
   });
+
+  const trashButtons = document.querySelectorAll(".fa-trash");
+  handleDeleteButtonClick(trashButtons);
 }
 
 function addQuestion(questionData, questionIndex, isEditing) {
@@ -63,17 +69,70 @@ function addQuestion(questionData, questionIndex, isEditing) {
     isEditing
   );
 
-  const questionHtml = `
-     <div class="question-box mb-3" data-question-number="${questionIndex}">
-      <p class="question">${questionIndex + 1}. ${questionData.question}</p>
-      <div class="options">${optionsHtml}</div>
-      <div class="correct-answer">
-        <b>Correct Answer </b> : <span>${questionData.correctAnswer}</span>
+  const questionHtml = isEditing
+    ? `<div class="question-box mb-3" data-question-number="${questionIndex}">
+      <div>
+        <p class="question">${questionIndex + 1}. ${questionData.question}</p>
+        <div class="options">${optionsHtml}</div>
+        <div class="correct-answer">
+          <b>Correct Answer </b> : <span>${questionData.correctAnswer}</span>
+        </div>
       </div>
-    </div>
-  `;
+      <i class="fa-solid fa-trash"></i>
+    </div>`
+    : `<div class="question-box d-block mb-3" data-question-number="${questionIndex}">
+        <p class="question">${questionIndex + 1}. ${questionData.question}</p>
+        <div class="options">${optionsHtml}</div>
+        <div class="correct-answer">
+          <b>Correct Answer </b> : <span>${questionData.correctAnswer}</span>
+        </div>
+    </div>`;
 
-  previewContainer?.insertAdjacentHTML("beforeend", questionHtml);
+  previewBox?.insertAdjacentHTML("beforeend", questionHtml);
+}
+
+function handleDeleteButtonClick(buttons) {
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const confirm = window.confirm(
+        "Are you sure you want to delete this question? This action can't be undo."
+      );
+      if (!confirm) return;
+
+      // Get the question number from the clicked element
+      const questionBox = e.target.closest(".question-box");
+      if (questionBox) {
+        const questionNumber = parseInt(questionBox.dataset.questionNumber);
+        const currentQuiz = getCurrentQuiz();
+
+        // Filter out the question
+        const updatedQuestions = currentQuiz.questions.filter(
+          (_, index) => index !== questionNumber
+        );
+
+        const updatedQuiz = {
+          ...currentQuiz,
+          questions: updatedQuestions,
+        };
+
+        const allQuiz = JSON.parse(localStorage.getItem("quiz"));
+        const updatedQuizArray = allQuiz.map((quiz) => {
+          if (quiz.title === currentQuiz.title) {
+            return updatedQuiz;
+          }
+        });
+
+        // Save the updated quiz back to local storage
+        localStorage.setItem("quiz", JSON.stringify(updatedQuizArray));
+
+        // delete from the DOM as well
+        // e.target.closest(".question-box").remove();
+        displayPreview(updatedQuiz.questions, true);
+      } else {
+        alert("Oops! Something went wrong.");
+      }
+    });
+  });
 }
 
 function addSubmitButton() {
@@ -83,7 +142,7 @@ function addSubmitButton() {
     </div>
   `;
 
-  previewContainer.insertAdjacentHTML("beforeend", buttonHtml);
+  previewBox.insertAdjacentHTML("beforeend", buttonHtml);
 }
 
 function addEventListenerOnCard(card, questions) {
@@ -97,10 +156,12 @@ function addEventListenerOnCard(card, questions) {
 
 function renderQuiz(quizData) {
   if (!quizData || quizData.length <= 0) {
+    console.log(quizData);
     displayMessage();
     return;
   }
-
+  // clear previous quiz html if present
+  cardsContainer.innerHTML = "";
   quizData.forEach((quiz) => {
     createQuizCard(quiz);
 
@@ -127,6 +188,15 @@ function updateQuiz(title) {
             const question = updatedData.find(
               (q) => q.question === questionObj.question
             );
+
+            // update correct answer only if user has selected one
+            if (
+              !question.selectedOptions ||
+              question.selectedOptions.length <= 0
+            ) {
+              return { ...questionObj };
+            }
+
             return { ...questionObj, correctAnswer: question.selectedOptions };
           }),
         }
@@ -146,15 +216,13 @@ function getCurrentQuiz() {
 }
 
 function handleSubmitButtonClick(button) {
-  const currentQuiz = getCurrentQuiz();
-
   button.addEventListener("click", () => {
-    saveSubmittedData(currentQuiz, previewContainer);
+    const currentQuiz = getCurrentQuiz();
+    saveSubmittedData(currentQuiz, previewBox);
     updateQuiz(currentQuiz.title);
 
-    const updatedQuiz = getCurrentQuiz();
-
-    displayPreview(updatedQuiz.questions);
+    renderQuiz(JSON.parse(localStorage.getItem("quiz")));
+    alert("Quiz edit successfully.");
   });
 }
 
@@ -175,6 +243,8 @@ editButton?.addEventListener("click", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  const quiz = JSON.parse(localStorage.getItem("quiz"));
+  authoriseUser(messageEl, mainContainer);
+
+  const quiz = Array.from(JSON.parse(localStorage.getItem("quiz")));
   renderQuiz(quiz);
 });

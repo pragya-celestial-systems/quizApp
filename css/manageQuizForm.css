@@ -1,4 +1,4 @@
-main {
+#content {
   height: 85vh;
   width: 85vw;
   margin: auto;
@@ -76,9 +76,14 @@ main {
   color: grey;
 }
 
-#previewContainer {
+.preview-container {
   height: 100%;
   width: 100%;
+}
+
+.question-box {
+  display: flex;
+  justify-content: space-between;
 }
 
 .options {
@@ -88,4 +93,20 @@ main {
 
 #editButton {
   width: 100px;
+}
+
+.unauthorised-msg {
+  height: 100svh;
+  width: 100svw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: grey;
+}
+
+.fa-trash {
+  color: rgb(221, 0, 0);
+  cursor: pointer;
+  height: fit-content;
 }

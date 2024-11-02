@@ -18,7 +18,8 @@
   width: 50%;
 }
 
-#createButton, #manageButton {
+#createButton,
+#manageButton {
   cursor: pointer;
   height: 25vh;
   width: 20vw;
@@ -32,7 +33,8 @@
   font-weight: 600;
 }
 
-#createButton:hover, #manageButton:hover {
+#createButton:hover,
+#manageButton:hover {
   box-shadow: 0 5px 12px lightgrey;
   transition: 0.3s;
 }
@@ -47,4 +49,14 @@
 
 .navbar-collapse {
   flex-grow: 0;
+}
+
+.unauthorised-msg {
+  height: 100svh;
+  width: 100svw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: grey;
 }

@@ -20,16 +20,14 @@ export function createOptions(
   const type = optionType === "MCQ" ? "radio" : "checkbox";
   let options = "";
 
-  optionsArray.forEach((option, index) => {
+  optionsArray.forEach((option) => {
     const optionHtml = !isEditing
-      ? `<div class="option">${option}<div/>`
-      : `<input type="${type}" name="question-${questionIndex}" value="${option}"/> ${option}`;
+      ? `<div class="option">${option}</div>`
+      : `<div class="option">
+        <input type="${type}" name="question-${questionIndex}" value="${option}"/> ${option}
+      </div>`;
 
-    options += `
-      <div class="option">
-        ${optionHtml}
-      </div>
-      `;
+    options += optionHtml;
   });
 
   return options;
@@ -56,4 +54,25 @@ export function saveSubmittedData(quizData, inputContainer) {
   // save answers in the local storage
   localStorage.setItem("answers", JSON.stringify(answers));
   return { answers, quizData };
+}
+
+function displayNotAuthorised(messageEl, mainContainer) {
+  messageEl.classList.remove("d-none");
+  mainContainer.classList.add("d-none");
+}
+
+function hideNotAuthorised(messageEl, mainContainer) {
+  messageEl.classList.add("d-none");
+  mainContainer.classList.remove("d-none");
+}
+
+export function authoriseUser(messageEl, mainContainer) {
+  const token = localStorage.getItem("quiz-token");
+
+  if (!token || token !== "quizToken123") {
+    displayNotAuthorised(messageEl, mainContainer);
+    return;
+  }
+
+  hideNotAuthorised(messageEl, mainContainer);
 }

@@ -1,8 +1,11 @@
 import { renderForm } from "./createQuiz.js";
+import { authoriseUser } from "./global.js";
 import { renderEditQuizForm } from "./manageQuiz.js";
 
 const buttons = document.querySelectorAll(".btn");
 const activeUser = document.querySelector(".active-user");
+const messageElement = document.querySelector(".unauthorised-msg");
+const mainContainer = document.querySelector("main");
 
 // add event listener on each button
 buttons.forEach((btn) => {
@@ -25,5 +28,5 @@ function renderContent(buttonType) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  activeUser.textContent = localStorage.getItem("user-type");
+  authoriseUser(messageElement, mainContainer);
 });

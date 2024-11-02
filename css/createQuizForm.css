@@ -63,3 +63,13 @@ label {
 .correct-answer {
   color: grey;
 }
+
+.unauthorised-msg {
+  height: 100svh;
+  width: 100svw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: grey;
+}

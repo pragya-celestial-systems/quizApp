@@ -9,7 +9,9 @@ const inputFields = document.querySelectorAll("input");
 
 function resetInput() {
   username.value = "";
+  console.log(password.value);
   password.value = "";
+  console.log(password.value);
   radioButtons.forEach((btn) => (btn.checked = false));
   hideAlert();
 }
@@ -42,10 +44,11 @@ function handleFormSubmission(enteredData) {
   }
 
   saveToken(user?.userType);
-  resetInput();
 
   // navigate to the home page
   displayHome(user?.userType);
+
+  resetInput();
 }
 
 function displayHome(user) {
@@ -102,4 +105,9 @@ loginForm.addEventListener("submit", (e) => {
 // add event listener on the input fields
 inputFields.forEach((inputEl) => {
   inputEl.addEventListener("focus", hideAlert);
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  username.value = "admin";
+  password.value = "admin@123";
 });
