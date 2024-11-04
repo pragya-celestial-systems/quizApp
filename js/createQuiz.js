@@ -188,9 +188,12 @@ function checkDuplicateOption(option) {
 }
 
 function checkAnswerType() {
-  const currentOptionType = document.querySelector(".answer-type:checked");
   const prevOptionType =
     optionsContainer?.firstElementChild?.firstElementChild?.type;
+
+  if(prevOptionType === null) {
+      return false;
+  }
 
   if (optionsContainer.childElementCount >= 1) {
     if (!prevOptionType) {
@@ -200,7 +203,7 @@ function checkAnswerType() {
   }
 
   //if user has changed the option type after adding one or more options
-  if (prevOptionType === "radio" && currentOptionType.value !== "MCQ") {
+  if (prevOptionType === "radio" && answerType !== "MCQ") {
     displayAlert(
       "alert-danger",
       "Answer Type can't be both the radio and the checkbox."
@@ -208,7 +211,7 @@ function checkAnswerType() {
     return true;
   }
 
-  if (prevOptionType === "radio" && currentOptionType.value !== "MCQ") {
+  if (prevOptionType === "radio" && answerType !== "MCQ") {
     displayAlert(
       "alert-danger",
       "Answer Type can't be both the radio and the checkbox."
@@ -219,7 +222,7 @@ function checkAnswerType() {
   return false;
 }
 
-addOptionButton?.addEventListener("click", () => {
+function handleAddOption(){
   const hasDuplicate = checkDuplicateOption(option.value);
   const hasError = checkAnswerType();
 
@@ -245,7 +248,9 @@ addOptionButton?.addEventListener("click", () => {
 
   // reset option field value
   option.value = "";
-});
+}
+
+addOptionButton?.addEventListener("click", handleAddOption);
 
 addQuestionButton?.addEventListener("click", (e) => {
   // validate input
@@ -334,3 +339,9 @@ optionsType.forEach((option) => {
     answerType = option.value;
   });
 });
+
+document.querySelector("#optionForm").addEventListener('keypress', (e) => {
+  if(e.key === "Enter"){
+    handleAddOption();
+  }
+})
