@@ -18,19 +18,20 @@ export function createOptions(
   isEditing = false
 ) {
   const type = answerType === "MCQ" ? "radio" : "checkbox";
-  let options = "";
+  const prefix =
+    answerType === "MCQ"
+      ? `<i class="fa-regular fa-circle"></i>`
+      : `<i class="fa-regular fa-square"></i>`;
 
-  optionsArray.forEach((option) => {
-    const optionHtml = !isEditing
-      ? `<div class="option">${option}</div>`
-      : `<div class="option">
-        <input type="${type}" name="question-${questionIndex}" value="${option}"/> ${option}
-      </div>`;
-
-    options += optionHtml;
-  });
-
-  return options;
+  return optionsArray
+    .map((option) =>
+      !isEditing
+        ? `<div class="option">${prefix} ${option}</div>`
+        : `<div class="option">
+            <input type="${type}" name="question-${questionIndex}" value="${option}" /> ${option}
+          </div>`
+    )
+    .join("");
 }
 
 export function saveSubmittedData(quizData, inputContainer) {

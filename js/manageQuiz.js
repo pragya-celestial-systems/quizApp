@@ -170,8 +170,12 @@ function renderQuiz(quizData) {
     displayMessage();
     return;
   }
+
   // clear previous quiz html if present
-  cardsContainer.innerHTML = "";
+  if (cardsContainer) {
+    cardsContainer.innerHTML = "";
+  }
+
   quizData.forEach((quiz) => {
     createQuizCard(quiz);
 

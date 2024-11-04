@@ -338,6 +338,7 @@ window.addEventListener("DOMContentLoaded", () => {
 optionsType.forEach((option) => {
   option.addEventListener("change", (e) => {
     answerType = option.value;
+    optionsContainer.innerHTML = "";
   });
 });
 

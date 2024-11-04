@@ -102,21 +102,22 @@ inputFields.forEach((inputEl) => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
+  username.value = "admin";
+  password.value = "admin@123";
+});
 
-  // if user is already logged in, redirect to the homepage
+window.addEventListener("load", () => {
   const token = localStorage.getItem("quiz-token");
 
-  if(token){
-    if(token === "admin-token-xyz123"){
+  // if user is already logged in, redirect to the homepage
+  if (token) {
+    if (token === "admin-token-xyz123") {
       window.open("./pages/admin.html", "_self");
       return;
     }
-    if(token === "user-token-xyz123"){
+    if (token === "user-token-xyz123") {
       window.open("./pages/user.html");
       return;
     }
   }
-
-  username.value = "admin";
-  password.value = "admin@123";
 });
