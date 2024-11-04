@@ -1,10 +1,10 @@
 import { renderForm } from "./createQuiz.js";
-import { authoriseUser } from "./global.js";
+import { authoriseUser, logoutUser } from "./global.js";
 import { renderEditQuizForm } from "./manageQuiz.js";
 
 const buttons = document.querySelectorAll(".btn");
-const activeUser = document.querySelector(".active-user");
 const messageElement = document.querySelector(".unauthorised-msg");
+const logoutButton = document.querySelector(".logout-btn");
 const mainContainer = document.querySelector("main");
 
 // add event listener on each button
@@ -28,5 +28,7 @@ function renderContent(buttonType) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  authoriseUser(messageElement, mainContainer);
+  authoriseUser(messageElement, mainContainer, "admin");
 });
+
+logoutButton.addEventListener("click", logoutUser);

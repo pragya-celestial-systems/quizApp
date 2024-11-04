@@ -1,5 +1,10 @@
+import { authoriseUser, logoutUser } from "./global.js";
+
 const quizContainer = document.querySelector("#quizContainer");
 const messageContainer = document.querySelector("#message");
+const logoutButton = document.querySelector(".logout-btn");
+const mainContainer = document.querySelector(".content");
+const messageBox = document.querySelector(".unauthorised-msg");
 
 function createQuizCard(quizTitle) {
   const quizCardHtml = `
@@ -42,6 +47,8 @@ function displayQuizCard(quizArray) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  authoriseUser(messageBox, mainContainer, "user");
+
   const quizArray = JSON.parse(localStorage.getItem("quiz"));
 
   if (quizArray.length <= 0) {
@@ -52,3 +59,5 @@ window.addEventListener("DOMContentLoaded", () => {
   hideMessage();
   displayQuizCard(quizArray);
 });
+
+logoutButton.addEventListener("click", logoutUser);

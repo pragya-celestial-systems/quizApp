@@ -61,3 +61,13 @@
   font-size: 1.5rem;
   font-weight: 500;
 }
+
+.unauthorised-msg {
+  height: 100svh;
+  width: 100svw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: grey;
+}

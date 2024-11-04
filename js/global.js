@@ -13,11 +13,11 @@ export function getQuizData() {
 
 export function createOptions(
   optionsArray,
-  optionType,
+  answerType,
   questionIndex,
   isEditing = false
 ) {
-  const type = optionType === "MCQ" ? "radio" : "checkbox";
+  const type = answerType === "MCQ" ? "radio" : "checkbox";
   let options = "";
 
   optionsArray.forEach((option) => {
@@ -37,7 +37,9 @@ export function saveSubmittedData(quizData, inputContainer) {
   const answers = quizData.questions.map((question, index) => {
     // Array.from - it will convert the nodelist into an array
     let selectedOptions = Array.from(
-      inputContainer.querySelectorAll(`input[name="question-${index}"]:checked`)
+      inputContainer?.querySelectorAll(
+        `input[name="question-${index}"]:checked`
+      )
     ).map((input) => input.value);
 
     if (question.answerType === "MCQ") {
@@ -57,22 +59,44 @@ export function saveSubmittedData(quizData, inputContainer) {
 }
 
 function displayNotAuthorised(messageEl, mainContainer) {
-  messageEl.classList.remove("d-none");
-  mainContainer.classList.add("d-none");
+  messageEl?.classList.remove("d-none");
+  mainContainer?.classList.add("d-none");
 }
 
 function hideNotAuthorised(messageEl, mainContainer) {
-  messageEl.classList.add("d-none");
-  mainContainer.classList.remove("d-none");
+  messageEl?.classList.add("d-none");
+  mainContainer?.classList.remove("d-none");
 }
 
-export function authoriseUser(messageEl, mainContainer) {
+export function authoriseUser(messageEl, mainContainer, userType) {
   const token = localStorage.getItem("quiz-token");
 
-  if (!token || token !== "quizToken123") {
-    displayNotAuthorised(messageEl, mainContainer);
-    return;
+  if (userType === "admin") {
+    if (!token || token !== "admin-token-xyz123") {
+      displayNotAuthorised(messageEl, mainContainer);
+      return;
+    }
+  } else if (userType == "user") {
+    if (!token || token !== "user-token-xyz123") {
+      displayNotAuthorised(messageEl, mainContainer);
+      return;
+    }
   }
 
   hideNotAuthorised(messageEl, mainContainer);
+}
+
+export function logoutUser() {
+  localStorage.removeItem("quiz-token");
+  window.open("../index.html");
+}
+
+export function saveToken(userType) {
+  if (userType === "admin") {
+    localStorage.setItem("quiz-token", "admin-token-xyz123");
+  }
+
+  if (userType === "user") {
+    localStorage.setItem("quiz-token", "user-token-xyz123");
+  }
 }

@@ -32,22 +32,25 @@
     <title>Test</title>
   </head>
   <body>
-    <h1 id="quizTitle" class="text-center mt-5"></h1>
-    <main id="content" class="mt-5 w-50 mx-auto">
-      <form id="test">
-        <button id="submitButton" class="btn btn-primary" type="submit">
-          Submit
-        </button>
-      </form>
-      <div class="overlay d-none">
-        <div id="modalContent" class="rounded-5">
-          <div id="closeBtnContainer">
-            <i class="fa-solid fa-xmark"></i>
+    <div class="unauthorised-msg">Not Authorised!</div>
+    <div class="content">
+      <h1 id="quizTitle" class="text-center mt-5"></h1>
+      <main id="content" class="mt-5 w-50 mx-auto">
+        <form id="test">
+          <button id="submitButton" class="btn btn-primary" type="submit">
+            Submit
+          </button>
+        </form>
+        <div class="overlay d-none">
+          <div id="modalContent" class="rounded-5">
+            <div id="closeBtnContainer">
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+            <div class="result" class="shadow-lg rounded-5"></div>
           </div>
-          <div class="result" class="shadow-lg rounded-5"></div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
 
     <!-- script -->
     <script src="../js/quiz.js" type="module"></script>

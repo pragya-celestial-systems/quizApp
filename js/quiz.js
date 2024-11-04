@@ -1,10 +1,16 @@
-import { createOptions, getQuizData, saveSubmittedData } from "./global.js";
+import {
+  authoriseUser,
+  createOptions,
+  getQuizData,
+  saveSubmittedData,
+} from "./global.js";
 
 const form = document.querySelector("#test");
 const quizTitle = document.querySelector("#quizTitle");
 const overlay = document.querySelector(".overlay");
-const modalContent = document.querySelector("#modalContent");
 const resultContainer = document.querySelector(".result");
+const mainContainer = document.querySelector(".content");
+const messageBox = document.querySelector(".unauthorised-msg");
 
 function renderQuestions(questionsArray) {
   questionsArray.forEach((quizObj, index) => {
@@ -16,12 +22,12 @@ function renderQuestions(questionsArray) {
     );
 
     const questionHtml = `
-        <div class="questionBox" data-question-number="${index}">
-          <p class="question">Qus : ${quizObj.question}</p>
-          <div class="options">
-            ${options}
-          </div>
+      <div class="questionBox" data-question-number="${index}">
+        <p class="question">Qus : ${quizObj.question}</p>
+        <div class="options">
+          ${options}
         </div>
+      </div>
       `;
 
     form.insertAdjacentHTML("afterbegin", questionHtml);
@@ -71,8 +77,8 @@ function displayResult(resultData) {
 
   const resultHtml = `
   <h2 id="heading">Your Score</h3>
-            <h3 id="score">${resultData.correctCount}/${resultData.questions}</h3>
-          <p id="text">Your score is ${resultData.score}%. You Answered ${resultData.correctCount} question out of ${resultData.questions} questions correct.</p>
+    <h3 id="score">${resultData.correctCount}/${resultData.questions}</h3>
+  <p id="text">Your score is ${resultData.score}%. You Answered ${resultData.correctCount} out of ${resultData.questions} questions correct.</p>
   `;
 
   resultContainer.insertAdjacentHTML("afterbegin", resultHtml);
@@ -93,17 +99,15 @@ form.addEventListener("submit", (e) => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
+  authoriseUser(messageBox, mainContainer, "user");
+
+  localStorage.removeItem("answers");
   const quizData = getQuizData();
 
   // Set the quiz title
   quizTitle.textContent = quizData.title;
 
   renderQuestions(quizData.questions);
-});
-
-window.addEventListener("load", () => {
-  // clear the stored answers
-  localStorage.removeItem("answers");
 });
 
 overlay.addEventListener("click", (e) => {

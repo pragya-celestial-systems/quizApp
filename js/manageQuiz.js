@@ -167,7 +167,6 @@ function addEventListenerOnCard(card, questions) {
 
 function renderQuiz(quizData) {
   if (!quizData || quizData.length <= 0) {
-    console.log(quizData);
     displayMessage();
     return;
   }

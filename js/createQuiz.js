@@ -13,6 +13,8 @@ const inputElements = document.querySelectorAll("input");
 const createQuizButton = document.querySelector("#createQuizButton");
 const messageEl = document.querySelector(".unauthorised-msg");
 const mainContainer = document.querySelector("main");
+const optionsType = document.querySelectorAll(".answer-type");
+let answerType;
 const questionsArray = [];
 
 export function renderForm() {
@@ -56,12 +58,12 @@ function addOption(option, optionType) {
   optionType = answerType === "checkBox" ? "checkbox" : "radio";
 
   const optionHtml = `
-  <div class="option">
-  <input type="${optionType}" name="option" value="${option}"/> ${option}
-  </div>
-  `;
+<div class="option">
+<input type="${optionType}" name="option" value="${option}"/> ${option}
+</div>
+`;
 
-  optionsContainer.insertAdjacentHTML("afterbegin", optionHtml);
+  optionsContainer.insertAdjacentHTML("beforeend", optionHtml);
 }
 
 function getOptions() {
@@ -72,8 +74,6 @@ function getOptions() {
 }
 
 function checkEmptyField() {
-  const answerType = document.querySelector(".answer-type:checked");
-
   if (quizTitle.value === "") {
     displayAlert("alert-danger", "Please fill the quiz title.");
     return { status: 204 };
@@ -92,6 +92,16 @@ function checkEmptyField() {
 }
 
 function saveQuiz(questions) {
+  const allQuiz = JSON.parse(localStorage.getItem("quiz"));
+  const hasSameTitle = allQuiz.findIndex(
+    (quiz) => quiz.title === quizTitle.value
+  );
+
+  if (hasSameTitle !== -1) {
+    displayAlert("alert-danger", "Quiz with same title already exists.");
+    return true;
+  }
+
   const quizObj = {
     title: quizTitle.value,
     questions,
@@ -102,10 +112,10 @@ function saveQuiz(questions) {
 
   // save the updated array in the local storage
   localStorage.setItem("quiz", JSON.stringify(quizArray));
+  return false;
 }
 
 function getQuestionData() {
-  const answerType = document.querySelector(".answer-type:checked").value;
   let correctAnswer = getCorrectAnswer();
 
   if (!correctAnswer || correctAnswer.length <= 0) {
@@ -138,8 +148,8 @@ function addQuestion(questionData) {
   const optionsHtml = questionData.options
     .map(
       (option, index) => `
-    <p>${String.fromCharCode(65 + index)}. ${option}</p>
-  `
+<p>${String.fromCharCode(65 + index)}. ${option}</p>
+`
     )
     .join("");
 
@@ -149,30 +159,89 @@ function addQuestion(questionData) {
 
   // Create the full HTML for the question
   const questionHtml = `
-    <div class="questionBox">
-      <p class="question">Qus : ${questionData.question}</p>
-      <div class="options">
-        ${optionsHtml}
-      </div>
-      <div class="correct-answer">
-        <b>Correct Answer</b>: <span class="correctAnswer">${correctAnswerHtml}</span>
-      </div>
-    </div>
-  `;
+<div class="questionBox">
+<p class="question">Qus : ${questionData.question}</p>
+<div class="options">
+${optionsHtml}
+</div>
+<div class="correct-answer">
+<b>Correct Answer</b>: <span class="correctAnswer">${correctAnswerHtml}</span>
+</div>
+</div>
+`;
 
   // Append the question HTML to the questions container
   questionsContainer?.insertAdjacentHTML("beforeend", questionHtml);
 }
 
+function checkDuplicateOption(option) {
+  const options = Array.from(optionsContainer.children);
+  let hasDuplicateoption = false;
+
+  options.forEach((opt) => {
+    if (opt.firstElementChild.value.trim() === option) {
+      hasDuplicateoption = true;
+    }
+  });
+
+  return hasDuplicateoption;
+}
+
+function checkAnswerType() {
+  const currentOptionType = document.querySelector(".answer-type:checked");
+  const prevOptionType =
+    optionsContainer?.firstElementChild?.firstElementChild?.type;
+
+  if (optionsContainer.childElementCount >= 1) {
+    if (!prevOptionType) {
+      displayAlert("alert-danger", "Please select the answer type.");
+      return true;
+    }
+  }
+
+  //if user has changed the option type after adding one or more options
+  if (prevOptionType === "radio" && currentOptionType.value !== "MCQ") {
+    displayAlert(
+      "alert-danger",
+      "Answer Type can't be both the radio and the checkbox."
+    );
+    return true;
+  }
+
+  if (prevOptionType === "radio" && currentOptionType.value !== "MCQ") {
+    displayAlert(
+      "alert-danger",
+      "Answer Type can't be both the radio and the checkbox."
+    );
+    return true;
+  }
+
+  return false;
+}
+
 addOptionButton?.addEventListener("click", () => {
+  const hasDuplicate = checkDuplicateOption(option.value);
+  const hasError = checkAnswerType();
+
+  if (hasError) return;
+
+  if (hasDuplicate) {
+    displayAlert("alert-danger", "Duplicate option!");
+    option.value = "";
+    return;
+  }
+
   if (option.value === "") {
     displayAlert("alert-danger", "Option can't be empty.");
     return;
   }
 
-  if (optionsContainer.children.length < 5) {
-    addOption(option.value);
+  if (optionsContainer.children.length >= 5) {
+    displayAlert("alert-danger", "You can't add more than 5 options.");
+    return;
   }
+
+  addOption(option.value);
 
   // reset option field value
   option.value = "";
@@ -228,7 +297,9 @@ createQuizButton?.addEventListener("click", () => {
     return;
   }
 
-  saveQuiz(questionsArray);
+  const hasError = saveQuiz(questionsArray);
+
+  if (hasError) return;
 
   // clear all the questions and quiz title
   questionsContainer.innerHTML = "";
@@ -244,7 +315,7 @@ createQuizButton?.addEventListener("click", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  authoriseUser(messageEl, mainContainer);
+  authoriseUser(messageEl, mainContainer, "admin");
 
   // hide the questions container
   if (questionsContainer) {
@@ -256,4 +327,10 @@ window.addEventListener("DOMContentLoaded", () => {
   if (quizTitle) {
     quizTitle.value = `Quiz ${quizArrayLength + 1}`;
   }
+});
+
+optionsType.forEach((option) => {
+  option.addEventListener("change", (e) => {
+    answerType = option.value;
+  });
 });

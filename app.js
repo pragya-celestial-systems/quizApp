@@ -1,4 +1,5 @@
 import { users } from "./database/userDatabase.js";
+import { saveToken } from "./js/global.js";
 
 const loginForm = document.querySelector("#loginCard");
 const username = document.querySelector("#username");
@@ -9,9 +10,7 @@ const inputFields = document.querySelectorAll("input");
 
 function resetInput() {
   username.value = "";
-  console.log(password.value);
   password.value = "";
-  console.log(password.value);
   radioButtons.forEach((btn) => (btn.checked = false));
   hideAlert();
 }
@@ -57,11 +56,6 @@ function displayHome(user) {
   } else {
     window.open("./pages/user.html", "_self");
   }
-}
-
-function saveToken(userType) {
-  localStorage.setItem("quiz-token", "quizToken123");
-  localStorage.setItem("user-type", userType);
 }
 
 function findAndvalidateUser(userData) {
