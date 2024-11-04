@@ -3,6 +3,7 @@ import { authoriseUser } from "./global.js";
 const addQuestionButton = document.querySelector("#addQuestionButton");
 const quizTitle = document.querySelector("#quizTitle");
 const question = document.querySelector("#question");
+const optionForm = document.querySelector("#optionForm");
 const option = document.querySelector("#option");
 const addOptionButton = document.querySelector("#addOptionButton");
 const optionsContainer = document.querySelector("#optionsContainer");
@@ -191,8 +192,8 @@ function checkAnswerType() {
   const prevOptionType =
     optionsContainer?.firstElementChild?.firstElementChild?.type;
 
-  if(prevOptionType === null) {
-      return false;
+  if (prevOptionType === null) {
+    return false;
   }
 
   if (optionsContainer.childElementCount >= 1) {
@@ -222,7 +223,7 @@ function checkAnswerType() {
   return false;
 }
 
-function handleAddOption(){
+function handleAddOption() {
   const hasDuplicate = checkDuplicateOption(option.value);
   const hasError = checkAnswerType();
 
@@ -340,8 +341,8 @@ optionsType.forEach((option) => {
   });
 });
 
-document.querySelector("#optionForm").addEventListener('keypress', (e) => {
-  if(e.key === "Enter"){
+optionForm?.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
     handleAddOption();
   }
-})
+});
