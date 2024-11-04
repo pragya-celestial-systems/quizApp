@@ -17,14 +17,21 @@
       crossorigin="anonymous"
     ></script>
 
+    <!-- particles-js css -->
+    <link rel="stylesheet" href="./css/particlesJs.css">
+
     <!-- stylesheet -->
     <link rel="stylesheet" href="./app.css" />
 
     <title>Quiz App Login</title>
   </head>
   <body>
+    <!-- particles js container -->
+    <div id="particles-js"></div>
+
     <div id="content">
-      <form id="loginCard">
+      <h1 class="text-center quiz-heading mb-5">Login to Quizzify</h1>
+      <form id="loginCard" class="rounded-3">
         <div class="alert alert-danger" role="alert"></div>
         <label for="username" id="usernameLabel">Username</label>
         <input type="text" id="username" />
@@ -54,5 +61,10 @@
 
     <!-- script -->
     <script src="./app.js" type="module"></script>
+    
+    <!-- particles-js -->
+    <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
+    <script src="./js/particlesJs.js"></script>
   </body>
 </html>
