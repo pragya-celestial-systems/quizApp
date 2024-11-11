@@ -21,11 +21,11 @@ QuizBook is a web app for managing and taking quizzes. Admins can create and man
 ## Installation
 1. Clone the repo:
    ```bash
-   git clone https://github.com/your-username/quizbook.git
+   git clone https://github.com/pragya-celestial-systems/quizBook.git
 
 ## How to run locally
 1. Clone the repo:
    ```bash
-   git clone https://github.com/your-username/quizbook.git
+   git clone https://github.com/pragya-celestial-systems/quizBook.git
 
 2. Open **index.html** file on live server
